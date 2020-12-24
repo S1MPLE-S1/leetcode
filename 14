@@ -1,0 +1,24 @@
+编写一个函数来查找字符串数组中的最长公共前缀。 如果不存在公共前缀，返回空字符串 ""。
+class Solution:
+def longestCommonPrefix(self, strs):
+"""
+:type strs: List[str]
+:rtype: str
+"""
+#判断是否为空
+if not strs:
+return ""
+
+    # 找到最短的字符串
+    shorest = min(strs, key=len)
+
+    # 转换为枚举对象
+    for i_th, letter in enumerate(shorest):
+
+        for other in strs:
+
+            if other[i_th] != letter:
+
+                return shorest[:i_th]
+
+    return shortest
