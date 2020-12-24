@@ -1,0 +1,81 @@
+请你来实现一个 atoi 函数，使其能将字符串转换成整数。 首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。接下来的转化规则如下： 如果第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字字符组合起来，形成一个有符号整数。 假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成一个整数。
+class Solution:
+def myAtoi(self, str):
+"""
+:type str: str
+:rtype: int
+"""
+raw_str = str
+# set of valid
+valid_set = {
+'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', ' '
+}
+# set of num
+num_set = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+# set of sign
+sign_set = {'+', '-'}
+# set of space
+
+    k = 0  # current location
+    m = 0  # the number of signs
+    p = 0  # the last space location
+    n = 0  # the last signs location
+    i = 0  # the number of 'num'
+
+    temp_str = ''
+
+    # case1: str is Null
+    if len(raw_str) == 0:
+        return 0
+
+    # case2: illegal words at begining
+    if raw_str[0] not in valid_set:
+        return 0
+
+    for s in raw_str:
+        if s in sign_set:
+            # the sign after num is not valid
+            if i > 0:
+                break
+
+            m = m + 1
+            n = k
+            # case3: if there are more than 1 signs
+            if m > 1:
+                return 0
+        if s == ' ':
+            #  the space after num is not valid
+            if i > 0:
+                break
+            p = k
+
+        if s in num_set:
+            # case4: if the last sign location before last space location
+            if p > n and m > 0:
+                return 0
+            i = i + 1
+            temp_str = temp_str + s
+
+        if s not in valid_set:
+            k = k + 1
+            break
+
+        k = k + 1
+
+    # case5: have no number in str:
+    if i == 0:
+        return 0
+    else:
+        # the num with sign
+        if m > 0:
+            temp_str = raw_str[n] + temp_str
+
+    covert_int = int(temp_str)
+
+    # overflow
+    if covert_int >= 2**31 - 1:
+        return 2**31 - 1
+    if covert_int <= (-2**31):
+        return (-2**31)
+
+    return covert_int
